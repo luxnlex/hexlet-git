@@ -1,0 +1,157 @@
+ѕеред тем, как приступить к выполнению практического задани€, выполните команду make reset
+
+≈сли вы сделали что-то не так, и не знаете, как это исправить - вы можете выполнить команду make reset. ¬ результате директори€ вернетс€ в начальное состо€ние.
+
+” вас есть проект, который размещаетс€ в директории project
+
+¬ директории проекта запустили скрипт, который заменил все двойные кавычки на одинарные. Ќо это можно делать не во всех строчках, так как така€ замена местами делает код не рабочим.
+
+¬ам необходимо проиндексировать только корректные замены кавычек. ¬ результате индексировани€ только нужных данных вывод команды git diff должен быть таким:
+
+diff --git i/README.md w/README.md
+index ad878cc..9319801 100644
+--- i/README.md
++++ w/README.md
+@@ -51,7 +51,7 @@ redis_config = File.join(app_path, 'config', 'redis.yml.example')
+ project_config = File.join(app_path, 'config', 'project.yml.example')
+
+ # some different environment specifed configuration options in separate config
+-project_env_config = File.join(app_path, 'config', "project.#{Rails.env}.yml")
++project_env_config = File.join(app_path, 'config', 'project.#{Rails.env}.yml')
+
+ # config for awesome gem
+ awesome_gem_config = File.join(app_path, 'config', 'awesome_gem_config.yml')
+@@ -88,7 +88,7 @@ Persey.init Rails.env do # set current environment
+                                  # by default was 'http', but we need some little security
+       port      12345            # more, more security!
+       # and now we use configs for our options, which are not declared in any config
+-      uri      -> { "#{protocol}://#{domain}:#{port}" }
++      uri      -> { '#{protocol}://#{domain}:#{port}' }
+     end
+
+     site_uri   -> { web.uri }    # we can re-re-use different options
+diff --git i/lib/generators/persey/install/install_generator.rb w/lib/generators/persey/install/install_generator.rb
+index 2c91f4c..9e78b8a 100644
+--- i/lib/generators/persey/install/install_generator.rb
++++ w/lib/generators/persey/install/install_generator.rb
+@@ -5,7 +5,7 @@ module Persey
+
+       def create_configuration
+         copy_file('config.rb', 'config/config.rb')
+-        inject_into_file 'config/application.rb', before: "module #{Rails.application.class.parent_name}" do
++        inject_into_file 'config/application.rb', before: 'module #{Rails.application.class.parent_name}' do
+           <<-'RUBY'
+ require 'persey'
+ require File.expand_path('../config', __FILE__)
+diff --git i/lib/persey/adapters/ini.rb w/lib/persey/adapters/ini.rb
+index 1214ad3..a2ace7d 100644
+--- i/lib/persey/adapters/ini.rb
++++ w/lib/persey/adapters/ini.rb
+@@ -9,7 +9,7 @@ module Persey
+             raw_hash = IniFile.load(file).to_h
+             symbolize_keys(raw_hash)
+           rescue
+-            puts "FATAL: Error while process config from file '#{file}'"
++            puts 'FATAL: Error while process config from file '#{file}''
+           end
+         end
+       end
+diff --git i/lib/persey/adapters/json.rb w/lib/persey/adapters/json.rb
+index 08cf0ec..0f009b4 100644
+--- i/lib/persey/adapters/json.rb
++++ w/lib/persey/adapters/json.rb
+@@ -11,7 +11,7 @@ module Persey
+             raw_hash = parser.parse(json)
+             symbolize_keys(raw_hash)
+           rescue
+-            puts "FATAL: Error while process config from file '#{file}'"
++            puts 'FATAL: Error while process config from file '#{file}''
+           end
+         end
+       end
+diff --git i/lib/persey/adapters/toml.rb w/lib/persey/adapters/toml.rb
+index 1d64cf9..9bc1ce9 100644
+--- i/lib/persey/adapters/toml.rb
++++ w/lib/persey/adapters/toml.rb
+@@ -9,7 +9,7 @@ module Persey
+             raw_hash = TOML.load_file(file)
+             symbolize_keys(raw_hash)
+           rescue
+-            puts "FATAL: Error while process config from file '#{file}'"
++            puts 'FATAL: Error while process config from file '#{file}''
+           end
+         end
+       end
+diff --git i/lib/persey/adapters/yaml.rb w/lib/persey/adapters/yaml.rb
+index 18f5a1d..7a2e353 100644
+--- i/lib/persey/adapters/yaml.rb
++++ w/lib/persey/adapters/yaml.rb
+@@ -9,7 +9,7 @@ module Persey
+             raw_hash = YAML.load_file(file)
+             symbolize_keys(raw_hash)
+           rescue
+-            puts "FATAL: Error while process config from file '#{file}'"
++            puts 'FATAL: Error while process config from file '#{file}''
+           end
+         end
+       end
+diff --git i/lib/persey/builder.rb w/lib/persey/builder.rb
+index a7d29dd..42401b7 100644
+--- i/lib/persey/builder.rb
++++ w/lib/persey/builder.rb
+@@ -20,7 +20,7 @@ module Persey
+       e = env || @current_env
+       edata = @envs[e]
+
+-      raise ArgumentError, "Undefined environment '#{ env }" if edata.nil?
++      raise ArgumentError, 'Undefined environment '#{ env }' if edata.nil?
+
+       current_config = {}
+       if edata[:block]
+@@ -41,7 +41,7 @@ module Persey
+     def env(env, options = {}, &block)
+       env = env.to_sym
+
+-      raise ArgumentError, "Double definition of environment '#{ env }'" if @envs.has_key?(env)
++      raise ArgumentError, 'Double definition of environment '#{ env }'' if @envs.has_key?(env)
+
+       @envs[env] = { options: options }
+       @envs[env][:block] = block if block_given?
+diff --git i/lib/persey/configus_patch.rb w/lib/persey/configus_patch.rb
+index 4e411d0..20cdaa9 100644
+--- i/lib/persey/configus_patch.rb
++++ w/lib/persey/configus_patch.rb
+@@ -3,7 +3,7 @@ class Configus::Config
+     if Persey.config.to_hash.has_key?(meth)
+       Persey.config.send(meth)
+     else
+-      raise "'#{meth}' key does not exist in your config"
++      raise ''#{meth}' key does not exist in your config'
+     end
+   end
+ end
+diff --git i/lib/persey/inspector.rb w/lib/persey/inspector.rb
+index 884ca42..c796062 100644
+--- i/lib/persey/inspector.rb
++++ w/lib/persey/inspector.rb
+@@ -11,7 +11,7 @@ module Persey
+
+       def source(source_type, config_file, namespace = nil)
+         begin
+-          klass = "persey/adapters/#{source_type}".camelize.constantize
++          klass = 'persey/adapters/#{source_type}'.camelize.constantize
+           @sources << { class: klass, file: config_file, namespace: namespace } if File.exists?(config_file)
+         rescue
+           binding.pry
+‘айлы, которые не находатс€ под версионным контролем не должны быть проиндексированы.
+
+ѕри выполнении задани€ рекомендуетс€ использовать команду git add -p или git add -e или git add -i
+
+“ак же вы можете выполнить задание любым удобным вам способом. √лавное, чтобы результат был достигнут - проиндексированы все изменени€, за исключением тех, которые приведены выше.
+
+ƒл€ вызова справки вы всегда можете воспользоватьс€ опцией --help, например, git add --help.
+
+¬ј∆Ќќ:
+≈сли вы будете редактировать diff (например в опци€ e дл€ ханка при выполнении команды git add -p), у вас откроетс€ редактор vim. ƒл€ перехода в режим редактировани€ - необходимо нажать клавижу i ƒл€ выхода из режима редактировани€ - необходимо одновлеменно нажать клавиши Ctrl-[ (control plus left square bracket) или Ctrl - Shift - [ ƒл€ сохранени€ выполненных изменений - не в режиме редактировани€ (см предыдущий пункт) нажать :wq
+
+ѕосле того, как вы проиндексируете необходимые файлы, отправьте решение на проверку.

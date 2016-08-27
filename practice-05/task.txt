@@ -1,0 +1,57 @@
+Перед тем, как приступить к выполнению практического задания, выполните команду make reset
+
+Если вы сделали что-то не так, и не знаете, как это исправить - вы можете выполнить команду make reset. В результате директория вернется в начальное состояние.
+
+У вас есть проект, который размещается в директории project
+
+Ниже отображены все файлы в репозитории:
+
+tree
+.
++-- Gemfile
++-- LICENSE.txt
++-- README
++-- README.md
++-- Rakefile
++-- lib
+¦   +-- generators
+¦   ¦   L-- persey
+¦   ¦       L-- install
+¦   ¦           +-- install_generator.rb
+¦   ¦           L-- templates
+¦   ¦               L-- config.rb
+¦   +-- persey
+¦   ¦   +-- adapters
+¦   ¦   ¦   +-- base.rb
+¦   ¦   ¦   +-- ini.rb
+¦   ¦   ¦   +-- json.rb
+¦   ¦   ¦   +-- toml.rb
+¦   ¦   ¦   L-- yaml.rb
+¦   ¦   +-- builder.rb
+¦   ¦   +-- configus_patch.rb
+¦   ¦   +-- inspector.rb
+¦   ¦   L-- loader.rb
+¦   +-- persey.rb
+¦   L-- version.rb
++-- persey.gemspec
+L-- test
+    +-- fixtures
+    ¦   +-- ini_config.ini
+    ¦   +-- json_config.json
+    ¦   +-- toml_config.toml
+    ¦   +-- yaml_config.yml
+    ¦   L-- yaml_config_with_envs.yml
+    +-- lib
+    ¦   L-- persey_test.rb
+    L-- test_helper.rb
+
+10 directories, 26 files
+Файл README необходимо удалить
+Файл lib/version.rb должен располагаться в директории lib/persey/version.rb
+Вам необходимо привести репозиторий в порядок удалив файл README и переместив файл version.rb в нужное место.
+
+Как всегда, вы можете решать эту задачу как вам удобно, но предпочтительно использовать команды git
+
+Для каждого изменения (каждого файла) требуется создать по отдельному коммиту.
+
+После того, как вы выполните 2 требуемых коммита, отправьте решение на проверку.
